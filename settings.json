@@ -1,0 +1,308 @@
+// Custom windows terminal json config
+{
+    // This URL provides help documentation for Windows Terminal
+    "$help": "https://aka.ms/terminal-documentation",
+    // This URL provides the schema for validating the JSON configuration file
+    "$schema": "https://aka.ms/terminal-profiles-schema",
+    
+    // Actions define custom key bindings
+    "actions": 
+    [
+        {
+            "command": "unbound",
+            "keys": "enter"  // Unbinds the Enter key
+        },
+        {
+            "command": "unbound",
+            "keys": "ctrl+insert"  // Unbinds Ctrl+Insert key
+        },
+        {
+            "command": 
+            {
+                "action": "copy",
+                "singleLine": false  // Copies selected text, allowing multiline
+            },
+            "keys": "ctrl+c"  // Binds the action to Ctrl+C
+        },
+        {
+            "command": "paste",
+            "keys": "ctrl+v"  // Binds the paste action to Ctrl+V
+        },
+        {
+            "command": "find",
+            "keys": "ctrl+shift+f"  // Binds the find action to Ctrl+Shift+F
+        },
+        {
+            "command": 
+            {
+                "action": "splitPane",
+                "split": "auto",  // Automatically decides the split direction
+                "splitMode": "duplicate"  // Duplicates the current profile in the new pane
+            },
+            "keys": "alt+shift+d"  // Binds the split pane action to Alt+Shift+D
+        }
+    ],
+
+    // Clipboard settings
+    "copyFormatting": "none",  // Disables formatting when copying
+    "copyOnSelect": true,  // Automatically copies text when selected
+    
+    // Default profile settings
+    "defaultProfile": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",  // Sets the default profile
+
+    // Window size settings
+    "initialCols": 110,  // Initial number of columns
+    "initialRows": 27,  // Initial number of rows
+    
+    // New tab menu settings
+    "newTabMenu": 
+    [
+        {
+            "type": "remainingProfiles"  // Displays remaining profiles in the new tab menu
+        }
+    ],
+    
+    // Profile definitions
+    "profiles": 
+    {
+        // Default settings applied to all profiles
+        "defaults": 
+        {
+            "adjustIndistinguishableColors": "indexed",
+            "antialiasingMode": "cleartype",
+            "colorScheme": "xcad",  // Default color scheme
+            "cursorShape": "filledBox",  // Default cursor shape
+            "experimental.retroTerminalEffect": false,
+            "font": 
+            {
+                "face": "JetBrainsMonoNL Nerd Font Mono",  // Default font face
+                "size": 11.0,  // Default font size
+                "weight": "medium"  // Default font weight
+            },
+            "intenseTextStyle": "bright",
+            "opacity": 98,  // Default opacity
+            "useAcrylic": false,  // Disable acrylic effect by default
+            "useAtlasEngine": false
+        },
+
+        // List of individual profiles
+        "list": 
+        [
+            {
+                "adjustIndistinguishableColors": "always",
+                "backgroundImage": null,
+                "backgroundImageOpacity": 0.02,
+                "backgroundImageStretchMode": "none",
+                "colorScheme": "Campbell Powershell",
+                "font": 
+                {
+                    "face": "JetBrainsMonoNL Nerd Font Mono"
+                },
+                "guid": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
+                "hidden": false,
+                "icon": "C:\\Program Files\\PowerShell\\7\\assets\\Powershell_av_colors.ico",
+                "intenseTextStyle": "bright",
+                "name": "PowerShell",
+                "source": "Windows.Terminal.PowershellCore",
+                "useAcrylic": true
+            },
+            {
+                "adjustIndistinguishableColors": "indexed",
+                "colorScheme": "xcad",
+                "commandline": "%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+                "cursorShape": "filledBox",
+                "font": 
+                {
+                    "face": "JetBrainsMonoNL Nerd Font",
+                    "size": 11.0,
+                    "weight": "medium"
+                },
+                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+                "hidden": true,
+                "icon": "C:\\Program Files\\PowerShell\\7\\assets\\Powershell_av_colors.ico",
+                "intenseTextStyle": "all",
+                "name": "Windows PowerShell",
+                "opacity": 98,
+                "padding": "8",
+                "useAcrylic": false
+            },
+            {
+                "adjustIndistinguishableColors": "indexed",
+                "antialiasingMode": "cleartype",
+                "colorScheme": "Campbell",
+                "commandline": "%SystemRoot%\\System32\\cmd.exe",
+                "cursorShape": "filledBox",
+                "experimental.retroTerminalEffect": false,
+                "font": 
+                {
+                    "face": "JetBrainsMono Nerd Font",
+                    "size": 11.0,
+                    "weight": "medium"
+                },
+                "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
+                "hidden": false,
+                "intenseTextStyle": "all",
+                "name": "Command Prompt",
+                "opacity": 98,
+                "useAcrylic": false,
+                "useAtlasEngine": false
+            },
+            {
+                "adjustIndistinguishableColors": "always",
+                "cursorShape": "filledBox",
+                "font": 
+                {
+                    "face": "JetBrains Mono"
+                },
+                "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
+                "hidden": false,
+                "name": "Azure Cloud Shell",
+                "opacity": 95,
+                "source": "Windows.Terminal.Azure"
+            },
+            {
+                "guid": "{aa49aab4-360f-5aca-8554-d673dfdfc7fe}",
+                "hidden": true,
+                "name": "Developer Command Prompt for VS 2022",
+                "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "guid": "{81a0847c-e159-5ceb-b215-95ad677ddb81}",
+                "hidden": true,
+                "name": "Developer PowerShell for VS 2022",
+                "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "adjustIndistinguishableColors": "indexed",
+                "backgroundImage": null,
+                "backgroundImageOpacity": 0.02,
+                "backgroundImageStretchMode": "none",
+                "colorScheme": "Gruv box",
+                "font": 
+                {
+                    "cellHeight": "1.2",
+                    "weight": "medium"
+                },
+                "guid": "{acbafd15-cbbb-5bb3-8a61-bed446ff4b83}",
+                "hidden": false,
+                "intenseTextStyle": "bright",
+                "name": "Ubuntu 24.04 LTS",
+                "source": "CanonicalGroupLimited.Ubuntu24.04LTS_79rhkp1fndgsc",
+                "useAcrylic": true
+            },
+            {
+                "guid": "{963ff2f7-6aed-5ce3-9d91-90d99571f53a}",
+                "hidden": true,
+                "name": "Ubuntu-24.04",
+                "source": "Windows.Terminal.Wsl"
+            }
+        ]
+    },
+
+    // Color schemes
+    "schemes": 
+    [
+        {
+            "background": "#0C0C0C",
+            "black": "#0C0C0C",
+            "blue": "#0037DA",
+            "brightBlack": "#767676",
+            "brightBlue": "#3B78FF",
+            "brightCyan": "#61D6D6",
+            "brightGreen": "#16C60C",
+            "brightPurple": "#B4009E",
+            "brightRed": "#E74856",
+            "brightWhite": "#F2F2F2",
+            "brightYellow": "#F9F1A5",
+            "cursorColor": "#FFFFFF",
+            "cyan": "#3A96DD",
+            "foreground": "#CCCCCC",
+            "green": "#13A10E",
+            "name": "Campbell",
+            "purple": "#881798",
+            "red": "#C50F1F",
+            "selectionBackground": "#FFFFFF",
+            "white": "#CCCCCC",
+            "yellow": "#C19C00"
+        },
+        {
+            "background": "#012456",
+            "black": "#0C0C0C",
+            "blue": "#0037DA",
+            "brightBlack": "#767676",
+            "brightBlue": "#3B78FF",
+            "brightCyan": "#61D6D6",
+            "brightGreen": "#16C60C",
+            "brightPurple": "#B4009E",
+            "brightRed": "#E74856",
+            "brightWhite": "#F2F2F2",
+            "brightYellow": "#F9F1A5",
+            "cursorColor": "#FFFFFF",
+            "cyan": "#3A96DD",
+            "foreground": "#E9F0FE",
+            "green": "#13A10E",
+            "name": "Campbell Powershell",
+            "purple": "#881798",
+            "red": "#C50F1F",
+            "selectionBackground": "#FFFFFF",
+            "white": "#CCCCCC",
+            "yellow": "#C19C00"
+        },
+        {
+            "background": "#111111",
+            "black": "#242424",
+            "blue": "#204a87",
+            "brightBlack": "#2e3436",
+            "brightBlue": "#3465a4",
+            "brightCyan": "#34e2e2",
+            "brightGreen": "#8ae234",
+            "brightPurple": "#b773ee",
+            "brightRed": "#ef2929",
+            "brightWhite": "#eeeeec",
+            "brightYellow": "#fce94f",
+            "cursorColor": "#aaaaaa",
+            "cyan": "#06989a",
+            "foreground": "#babdb6",
+            "green": "#4e9a06",
+            "name": "Gruv box",
+            "purple": "#75507b",
+            "red": "#cc0000",
+            "selectionBackground": "#555753",
+            "white": "#d3d7cf",
+            "yellow": "#c4a000"
+        },
+        {
+            "background": "#111111",
+            "black": "#0c0c0c",
+            "blue": "#0037da",
+            "brightBlack": "#767676",
+            "brightBlue": "#3b78ff",
+            "brightCyan": "#61d6d6",
+            "brightGreen": "#16c60c",
+            "brightPurple": "#b4009e",
+            "brightRed": "#e74856",
+            "brightWhite": "#f2f2f2",
+            "brightYellow": "#f9f1a5",
+            "cursorColor": "#ffffff",
+            "cyan": "#3a96dd",
+            "foreground": "#e5e5e5",
+            "green": "#13a10e",
+            "name": "xcad",
+            "purple": "#881798",
+            "red": "#c50f1f",
+            "selectionBackground": "#ffffff",
+            "white": "#cccccc",
+            "yellow": "#c19c00"
+        }
+    ],
+
+    // Settings for the terminal window
+    "showTabsInTitlebar": true,
+    "showTerminalTitleInTitlebar": true,
+    "tabWidthMode": "titleLength",
+    "theme": "system",
+    // Settings for profiles appearance
+    "themes": [],
+    // Settings for interaction with the terminal
+    "useAcrylicInTabRow": true
+}
