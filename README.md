@@ -1,3 +1,9 @@
-## Dev workflow setup
+# 🎨 Developer workflow setup
 
-This repository is my custom workflow repository! This setup includes custom color schemes, essential plugins, and personalized settings designed to enhance your coding experience. Dive in and customize your Neovim environment to fit your workflow perfectly.
+---
+
+Welcome to my configuration repository! Here, you'll find my personal setups for **Neovim** (`init.lua`) and **Windows Terminal** (`settings.json`). Feel free to explore and use these files to fine-tune your own configurations. Enjoy customizing your environment!
+
+---
+
+Let me know if there's anything else you'd like to add or modify!
