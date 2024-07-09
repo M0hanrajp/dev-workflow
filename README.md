@@ -90,29 +90,4 @@ Neovim's configurations are located under the following paths, depending on your
 | Linux, MacOS | `$XDG_CONFIG_HOME/nvim`, `~/.config/nvim` |
 
 ---
-
-Thanks :)
- 
-## 🛠️ Configurations
-
-Here's a brief overview of the configurations you'll find in this repository:
-
-- **Editor Configs:**
-  - VSCode
-  - Sublime Text
-  - Vim
-
-- **Shell Configs:**
-  - Bash
-  - Zsh
-  - Fish
-
-- **Development Environment:**
-  - Docker
-  - Kubernetes
-  - Virtual Environments
-
-- **Miscellaneous:**
-  - Git
-  - Tmux
-  - Custom Scripts
+Thanks :), This is a wip doc.
