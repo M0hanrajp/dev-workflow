@@ -91,3 +91,4 @@ Neovim's configurations are located under the following paths, depending on your
 
 ---
 Thanks :), This is a wip doc.
+Upcoming screenshots will be added.
