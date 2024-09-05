@@ -1054,31 +1054,85 @@ require("lazy").setup({
 			vim.cmd("colorscheme monokai-pro")
 		end,
 	},
+	-- Nvim lua line
 	{
 		"nvim-lualine/lualine.nvim",
 		requires = { "kyazdani42/nvim-web-devicons", opt = true },
 		config = function()
+			local colors = {
+				blue = "#80a0ff",
+				cyan = "#79dac8",
+				black = "#080808",
+				white = "#c6c6c6",
+				red = "#ff5189",
+				violet = "#d183e8",
+				grey = "#303030",
+				light_blue = "#a0c0ff",
+				dark_blue = "#6070ff",
+				light_cyan = "#a0f0e0",
+				dark_cyan = "#50b0a0",
+				light_black = "#303030",
+				dark_black = "#000000",
+				light_white = "#e0e0e0",
+				dark_white = "#a0a0a0",
+				light_red = "#ff8099",
+				dark_red = "#d04060",
+				light_violet = "#e0a0ff",
+				dark_violet = "#b060d0",
+				light_grey = "#505050",
+				dark_grey = "#101010",
+				green = "#80ff80",
+				light_green = "#a0ffa0",
+				dark_green = "#60d060",
+				yellow = "#ffff80",
+				light_yellow = "#ffffa0",
+				dark_yellow = "#d0d060",
+				plum = "#dda0dd",
+				light_plum = "#e0b0e0",
+				dark_plum = "#b060b0",
+			}
+			local bubbles_theme = {
+				normal = {
+					a = { fg = colors.black, bg = colors.violet },
+					b = { fg = colors.white, bg = colors.grey },
+					c = { fg = colors.white },
+				},
+
+				insert = { a = { fg = colors.black, bg = colors.green } },
+				visual = { a = { fg = colors.black, bg = colors.yellow } },
+				replace = { a = { fg = colors.black, bg = colors.green } },
+
+				inactive = {
+					a = { fg = colors.black, bg = colors.cyan },
+					b = { fg = colors.black, bg = colors.cyan },
+					c = { fg = colors.black },
+				},
+			}
 			require("lualine").setup({
 				options = {
-					theme = "monokai-pro", -- Use the Monokai Pro theme for lualine
-					section_separators = "",
+					theme = bubbles_theme,
 					component_separators = "",
+					section_separators = { left = "", right = "" },
 				},
 				sections = {
-					lualine_a = { "mode" },
-					lualine_b = { "branch" },
-					lualine_c = { "filename" },
-					lualine_x = { "encoding", "fileformat", "filetype" },
-					lualine_y = { "progress" },
-					lualine_z = { "location" },
+					lualine_a = { { "mode", separator = { left = "" }, right_padding = 2 } },
+					lualine_b = { "filename", "branch" },
+					lualine_c = {
+						"%=", --[[ add your center compoentnts here in place of this comment ]]
+					},
+					lualine_x = {},
+					lualine_y = { "filetype", "progress" },
+					lualine_z = {
+						{ "location", separator = { right = "" }, left_padding = 2 },
+					},
 				},
 				inactive_sections = {
-					lualine_a = {},
+					lualine_a = { "filename" },
 					lualine_b = {},
-					lualine_c = { "filename" },
-					lualine_x = { "location" },
+					lualine_c = {},
+					lualine_x = {},
 					lualine_y = {},
-					lualine_z = {},
+					lualine_z = { "location" },
 				},
 				tabline = {},
 				extensions = {},
