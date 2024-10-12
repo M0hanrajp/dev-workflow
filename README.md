@@ -102,7 +102,7 @@ Here's a youtube tutorial : [The Only Video You Need to Get Started with Neovim]
 6. Customize the css or js from this repo to make it look the way you want to, or even better, explore areas of VS Code that you want to customize.
 7. After making some changes, reload the extension (Reload Custom CSS and JS) from VS Code's command dialog.
 
-Originally inspired from (gelnraya/vscode-settings-json)[https://github.com/glennraya/vscode-settings-json.git]
+Originally inspired from [gelnraya/vscode-settings-json](https://github.com/glennraya/vscode-settings-json.git)
 
 > **NOTE**
 > [Backup](#FAQ) your previous configuration (if any exists)
