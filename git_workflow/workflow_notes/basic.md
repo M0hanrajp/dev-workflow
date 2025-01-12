@@ -73,6 +73,90 @@
 - `git remote show origin` Verify connectivity with the remote repository.
 - [A] `ssh -T git@github.com` from command line test if you are successfully authenticated.
 
+#### Creating a pull request in one's own repo.
+
+Follow the steps till you create your own branch and edit files. then after it's created 
+- go to github pull request feature and compare with your branch.
+- merge them, then follow below steps to delete the branch.
+
+1. **Check the current branch**:
+   ```bash
+   git branch
+   ```
+   - Shows that you were on the `update-git-workflow-infomration` branch.
+2. **Switch to the `master` branch**:
+   ```bash
+   git checkout master
+   ```
+   - This switched your working directory to the `master` branch.
+3. **Attempt to delete the `update-git-workflow-infomration` branch**:
+   ```bash
+   git branch -d update-git-workflow-infomration
+   ```
+   - This failed because the branch was not fully merged. Git warned you that deleting the branch might result in lost changes.
+4. **Fetch updates from the `origin` remote**:
+   ```bash
+   git fetch origin
+   ```
+   - This updated your local repository with the latest changes from the remote `origin`.
+5. **Merge the `origin/master` branch into your current branch**:
+   ```bash
+   git merge origin/master
+   ```
+   - Merged the latest changes from the `origin/master` branch into your local `master` branch. This fast-forwarded your local `master` to match the remote state.
+6. **Successfully delete the local `update-git-workflow-infomration` branch**:
+   ```bash
+   git branch -d update-git-workflow-infomration
+   ```
+   - This deleted the local `update-git-workflow-infomration` branch after confirming it was merged.
+7. **Delete the remote `update-git-workflow-infomration` branch**:
+   ```bash
+   git push origin --delete update-git-workflow-infomration
+   ```
+   - This deleted the `update-git-workflow-infomration` branch from the remote repository on GitHub.
+```bash
+:~/dev-workflow$ git branch
+  master
+* update-git-workflow-infomration
+:~/dev-workflow$ git checkout master
+Switched to branch 'master'
+Your branch is up to date with 'origin/master'.
+:~/dev-workflow$ git branch -d update-git-workflow-infomration
+error: The branch 'update-git-workflow-infomration' is not fully merged.
+If you are sure you want to delete it, run 'git branch -D update-git-workflow-infomration'.
+:~/dev-workflow$ git fetch origin
+remote: Enumerating objects: 1, done.
+remote: Counting objects: 100% (1/1), done.
+remote: Total 1 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+Unpacking objects: 100% (1/1), 943 bytes | 943.00 KiB/s, done.
+From github.com:M0hanrajp/dev-workflow
+   a93dd52..fa8b15d  master     -> origin/master
+:~/dev-workflow$ git merge origin/master
+Updating a93dd52..fa8b15d
+Fast-forward
+ git_workflow/cheatsheets_and_resources/atlassian-git-cheatsheet.pdf  | Bin 0 -> 104846 bytes
+ git_workflow/cheatsheets_and_resources/git-cheat-sheet-education.pdf | Bin 0 -> 100194 bytes
+ git_workflow/cheatsheets_and_resources/git-cheat-sheet.pdf           | Bin 0 -> 79730 bytes
+ git_workflow/cheatsheets_and_resources/github-git-cheat-sheet.pdf    | Bin 0 -> 405266 bytes
+ git_workflow/cheatsheets_and_resources/progit.pdf                    | Bin 0 -> 18834430 bytes
+ git_workflow/index.md                                                |  12 -----
+ git_workflow/workflow_notes/basic.md                                 |  80 +++++++++++++++++++++++++++++
+ git_workflow/workflow_notes/misc.md                                  | 309 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 8 files changed, 389 insertions(+), 12 deletions(-)
+ create mode 100644 git_workflow/cheatsheets_and_resources/atlassian-git-cheatsheet.pdf
+ create mode 100644 git_workflow/cheatsheets_and_resources/git-cheat-sheet-education.pdf
+ create mode 100644 git_workflow/cheatsheets_and_resources/git-cheat-sheet.pdf
+ create mode 100644 git_workflow/cheatsheets_and_resources/github-git-cheat-sheet.pdf
+ create mode 100644 git_workflow/cheatsheets_and_resources/progit.pdf
+ delete mode 100644 git_workflow/index.md
+ create mode 100644 git_workflow/workflow_notes/basic.md
+ create mode 100644 git_workflow/workflow_notes/misc.md
+:~/dev-workflow$ git branch -d update-git-workflow-infomration
+Deleted branch update-git-workflow-infomration (was 348e40f).
+:~/dev-workflow$ git push origin --delete update-git-workflow-infomration
+To github.com:M0hanrajp/dev-workflow.git
+ - [deleted]         update-git-workflow-infomration
+```
 #### **Other commands: that might be helpful**
 
 - To confirm which branch HEAD points to: `git branch`.
