@@ -307,3 +307,20 @@ If you intend to delete a commit but want to preserve the changes made in that c
    ```bash
    git commit -m "First line of commit message" -m "Second line of commit message"
    ```
+
+>Q: Best possible way to review commits between branches in cli
+
+Use `git reflog` command:
+```bash
+750ee31 (HEAD -> commit-codewars-solution) HEAD@{0}: commit: 8KYU, codewars solution
+8f8739b HEAD@{1}: commit: 8KYU, codewars solution
+27dfe38 HEAD@{2}: commit: 8KYU, codewars solution
+f2538a0 (origin/master, origin/HEAD, master) HEAD@{3}: checkout: moving from master to commit-codewars-solution
+f2538a0 (origin/master, origin/HEAD, master) HEAD@{4}: commit: 8KYU, codewars solution
+7fac44e HEAD@{5}: commit: 8KYU, codewars solution
+```
+>Q: When can we perform a review.
+
+Review can be performed after pull request creation and before the changes are merged into the branch.
+
+![image](https://github.com/user-attachments/assets/20b7a052-e288-4e40-ac08-66cad2cf824f)
