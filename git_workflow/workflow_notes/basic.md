@@ -18,6 +18,8 @@
    - Do not confuse with `-S`, here capital S stands for signing a commit using SSH or GPG key.
    - Use `-S` when you need to ensure commit authenticity and are working in environments where cryptographic 
      verification is necessary.    
+- `$ git reflog` (provides a log of reference updates for the current repository. It helps track actions such as 
+   commits, resets, rebases, checkouts, and merges.)
 - `$ git config --list` (for reviewing who is the contributor)
 - `$ git push origin new-feature`, git push origin new-feature.
 
@@ -162,3 +164,18 @@ To github.com:M0hanrajp/dev-workflow.git
 - To confirm which branch HEAD points to: `git branch`.
 - To check the default branch on the remote: `git remote show origin`. (Look for the line: HEAD branch: master).
 - To view the upstream branch set for your current branch, use: `git branch -vv`
+
+### Creating a signed commit using ssh
+```bash
+$ git config gpg.format ssh
+$ git config user.signingkey ~/.ssh/<public_key>
+$ git config commit.gpgsign true # so you don't need to include -S git commit -S -m "YOUR_COMMIT_MESSAGE"
+$ mkdir -p ~/.config/git
+$ echo "<github-email-id>" "ssh-rsa <key>" > ~/.config/git/allowed_signers
+$ git config gpg.ssh.allowedSignersFile ~/.config/git/allowed_signers
+$ $ dos2unix ~/.config/git/allowed_signers
+dos2unix: converting file /home/mpunix/.config/git/allowed_signers to Unix format...
+$ git log --show-signature
+commit 2e6ea86e7755a93469a482942c67fb9eccf54ce3 (HEAD -> master, origin/master, origin/HEAD)
+Good "git" signature for mohanrajp.github@gmail.com with RSA key SHA256:qxKPkeIUJaiU3kQMDRcfsWjLnsdlgpJ7fkDslFHWodA
+```
