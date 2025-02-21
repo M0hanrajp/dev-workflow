@@ -179,3 +179,40 @@ $ git log --show-signature
 commit 2e6ea86e7755a93469a482942c67fb9eccf54ce3 (HEAD -> master, origin/master, origin/HEAD)
 Good "git" signature for mohanrajp.github@gmail.com with RSA key SHA256:qxKPkeIUJaiU3kQMDRcfsWjLnsdlgpJ7fkDslFHWodA
 ```
+
+### Remove a file that was pushed to pull request
+```bash
+~/c-programming$ git reflog -n 8
+65b69f6 (HEAD -> struct-pointers-and-features, origin/struct-pointers-and-features) HEAD@{0}: commit: Updated notes
+3ca8831 HEAD@{1}: reset: moving to HEAD~1
+594420d HEAD@{2}: commit (amend): Updated notes and learnings
+24c11ac HEAD@{3}: commit: Updated notes and learnings
+3ca8831 HEAD@{4}: commit: Added code snippets for structs << Want to delete this file
+dd682a7 HEAD@{5}: commit: Understanding pointers,functions in struct
+d002ebd HEAD@{6}: commit: Understanding nested struct features
+021cba6 HEAD@{7}: commit: Understanding struct features
+
+~/c-programming$ git reset --soft 3ca8831^
+
+~/c-programming$ git status
+On branch struct-pointers-and-features
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   programming_concepts/structs/notes.md
+        new file:   programming_concepts/structs/practice/ypk_problems/snippets/a.c
+        new file:   programming_concepts/structs/practice/ypk_problems/snippets/a.out
+        new file:   programming_concepts/structs/practice/ypk_problems/snippets/b.c
+        new file:   programming_concepts/structs/practice/ypk_problems/snippets/c.c
+
+~/c-programming$ git rm -f programming_concepts/structs/practice/ypk_problems/snippets/a.out
+rm 'programming_concepts/structs/practice/ypk_problems/snippets/a.out'
+
+~/c-programming$ git commit -m "Deleted a.out file" programming_concepts/structs/practice/ypk_problems/snippets/
+[struct-pointers-and-features 170b5cf] Deleted a.out file
+ 3 files changed, 81 insertions(+)
+ create mode 100644 programming_concepts/structs/practice/ypk_problems/snippets/a.c
+ create mode 100644 programming_concepts/structs/practice/ypk_problems/snippets/b.c
+ create mode 100644 programming_concepts/structs/practice/ypk_problems/snippets/c.c
+
+~/c-programming$ git push --force origin struct-pointers-and-features
+```
