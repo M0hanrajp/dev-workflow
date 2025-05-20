@@ -179,7 +179,16 @@ $ git log --show-signature
 commit 2e6ea86e7755a93469a482942c67fb9eccf54ce3 (HEAD -> master, origin/master, origin/HEAD)
 Good "git" signature for mohanrajp.github@gmail.com with RSA key SHA256:qxKPkeIUJaiU3kQMDRcfsWjLnsdlgpJ7fkDslFHWodA
 ```
+### For already created repository
+```bash
+$ git config gpg.format ssh
+$ git config user.signingkey /home/mpunix/.ssh/<key>.pub
+$ git config commit.gpgsign true
+$ git config gpg.ssh.allowedsignersfile /home/<name>/.config/git/allowed_signers
+$ git commit files ...
 
+# check your commit using git log --show-signature
+```
 ### Remove a file that was pushed to pull request
 ```bash
 ~/c-programming$ git reflog -n 8
