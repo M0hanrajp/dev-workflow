@@ -83,7 +83,8 @@ I hope you enjoy your Neovim journey,
 
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
-
+vim.o.winborder = "rounded"
+-- disable global rounded border in all Telescope windows
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -125,13 +126,15 @@ vim.opt.softtabstop = 4
 vim.opt.tabstop = 4
 
 -- Note: automatically copies the indentation from the current line when you start a new line.
--- This is useful for maintaining the   same level of indentation across your code.
+-- This is useful for maintaining the same level of indentation across your code.
 vim.opt.autoindent = true
 
 -- makes the Tab key insert spaces according to the shiftwidth setting, which is useful for aligning your code neatly.
 vim.opt.smarttab = true
 
 vim.opt.expandtab = true
+
+vim.opt.cindent = true
 
 -- Enable break indent
 vim.opt.breakindent = true
@@ -223,6 +226,8 @@ vim.api.nvim_set_keymap("v", "<C-c>", '"+y', opts)
 vim.api.nvim_set_keymap("n", "<C-v>", '"+p', opts)
 vim.api.nvim_set_keymap("v", "<C-v>", '"+p', opts)
 vim.api.nvim_set_keymap("i", "<C-v>", "<C-r>+", opts)
+
+vim.api.nvim_set_keymap("t", "<", "<C-\\><C-n><C-w>h", { noremap = true, silent = true })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -384,12 +389,17 @@ require("lazy").setup({
 				-- You can put your default mappings / updates / etc. in here
 				--  All the info you're looking for is in `:help telescope.setup()`
 				--
+				defaults = {
+					border = false,
+				},
 				-- defaults = {
 				--   mappings = {
 				--     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
 				--   },
 				-- },
 				-- pickers = {}
+				-- disable global rounded border in all Telescope windows
+
 				extensions = {
 					["ui-select"] = {
 						require("telescope.themes").get_dropdown(),
@@ -420,6 +430,7 @@ require("lazy").setup({
 				builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
 					winblend = 0,
 					previewer = false,
+					border = false,
 				}))
 			end, { desc = "[/] Fuzzily search in current buffer" })
 
@@ -450,12 +461,13 @@ require("lazy").setup({
 			-- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
 			{
 				"j-hui/fidget.nvim",
-				event = "LspAttach",
+				tag = "legacy", -- <— pin to the legacy tag
+				lazy = false, -- load immediately, so it can hook into LSP startup
 				config = function()
 					require("fidget").setup({
 						notification = {
 							window = {
-								winblend = 0, -- Background color opacity in the notification window
+								winblend = 0,
 							},
 						},
 					})
@@ -524,6 +536,14 @@ require("lazy").setup({
 				root_dir = util.root_pattern("go.work", "go.mod", ".git"),
 			})
 
+			lspconfig.clangd.setup({
+				on_attach = on_attach,
+				capabilities = capabilities,
+				cmd = { "clangd" },
+				filetypes = { ".cpp", ".c" },
+				root_dir = util.root_pattern(".git"),
+			})
+
 			-- Optionally, you can set up other LSP servers here as well
 			-- lspconfig.pyright.setup { ... }
 			vim.api.nvim_create_autocmd("LspAttach", {
@@ -588,9 +608,8 @@ require("lazy").setup({
 					--    See `:help CursorHold` for information about when this is executed
 					--
 					-- Add border to hover documentation
-					vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-						border = "rounded", -- You can also use "single", "double", "shadow", etc.
-					})
+					-- This is moved to custom/lsp-float.lua, and is referred in main theme block
+
 					-- When you move your cursor, the highlights will be cleared (the second autocommand).
 					local client = vim.lsp.get_client_by_id(event.data.client_id)
 					if client and client.server_capabilities.documentHighlightProvider then
@@ -623,8 +642,31 @@ require("lazy").setup({
 			--  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
 			--  - settings (table): Override the default settings passed when initializing the server.
 			--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
+			-- Enable inline virtual-text diagnostics (opt-in on Neovim 0.11+)
+
+			vim.diagnostic.config({
+				virtual_text = {
+					-- show the message inline; you can also customize prefix or spacing
+					prefix = "●", -- e.g. a dot; try "●", "▎", etc.
+					spacing = 2,
+					-- current_line = true, -- uncomment to only show on the current line
+				},
+				signs = true, -- keep the “E”/“W” signs in the gutter
+				underline = true, -- underline problem text
+				update_in_insert = false,
+				float = {
+					border = "rounded", -- nicer floating window borders
+				},
+			})
+
+			vim.api.nvim_create_autocmd("CursorHold", {
+				callback = function()
+					vim.diagnostic.open_float(nil, { focusable = false })
+				end,
+			})
+
 			local servers = {
-				clangd = {},
+				-- clangd = {},
 				-- gopls = {},
 				-- pyright = {},
 				-- rust_analyzer = {},
@@ -750,23 +792,24 @@ require("lazy").setup({
 		},
 	},
 
-	-- autocompletion-setup
+	-- Autocompletion plugin configuration with icons
 	{
 		"hrsh7th/nvim-cmp",
+		version = false,
 		event = "InsertEnter",
 		dependencies = {
 			-- Snippet Engine & its associated nvim-cmp source
 			{
 				"L3MON4D3/LuaSnip",
 				build = (function()
-					-- Build Step for regex support in snippets. Disable on windows if necessary.
+					-- Build step required for regex support in snippets.
 					if vim.fn.has("win32") == 1 or vim.fn.executable("make") == 0 then
 						return
 					end
 					return "make install_jsregexp"
 				end)(),
 				dependencies = {
-					-- Uncomment the block below if you want friendly-snippets
+					-- Uncomment to enable friendly-snippets if desired:
 					-- {
 					--   "rafamadriz/friendly-snippets",
 					--   config = function()
@@ -776,21 +819,23 @@ require("lazy").setup({
 				},
 			},
 			"saadparwaiz1/cmp_luasnip",
-			-- Additional completion sources
 			"hrsh7th/cmp-nvim-lsp",
 			"hrsh7th/cmp-path",
+			-- Plugin to add icons to nvim-cmp suggestions.
+			"onsails/lspkind.nvim",
 		},
 		config = function()
 			local cmp = require("cmp")
 			local luasnip = require("luasnip")
+			local lspkind = require("lspkind")
 
-			-- Optional: setup LuaSnip if needed
+			-- Setup LuaSnip if you need additional snippet configuration
 			luasnip.config.setup({})
 
-			-- Set the background of the popup menu as transparent
+			-- Optional: set the popup menu's background to transparent.
 			vim.cmd("highlight Pmenu guibg=NONE")
 
-			-- Define Visual Studio Code Dark+ theme colors
+			-- Define the Visual Studio Code Dark+ theme colors
 			local darkplus = {
 				black = "#1e1e1e",
 				white = "#ffffff",
@@ -832,72 +877,35 @@ require("lazy").setup({
 					}),
 				},
 				mapping = cmp.mapping.preset.insert({
-					-- Select the next/previous item in the completion list.
 					["<C-n>"] = cmp.mapping.select_next_item(),
 					["<C-p>"] = cmp.mapping.select_prev_item(),
-
-					-- Scroll the documentation window.
 					["<C-b>"] = cmp.mapping.scroll_docs(-4),
 					["<C-f>"] = cmp.mapping.scroll_docs(4),
-
-					-- Accept the completion.
 					["<Tab>"] = cmp.mapping.confirm({ select = true }),
-
-					-- Manually trigger completion.
 					["<C-Space>"] = cmp.mapping.complete({}),
-
-					-- Jump forward in snippets
 					["<C-l>"] = cmp.mapping(function()
 						if luasnip.expand_or_locally_jumpable() then
 							luasnip.expand_or_jump()
 						end
 					end, { "i", "s" }),
-
-					-- Jump backward in snippets
 					["<C-h>"] = cmp.mapping(function()
 						if luasnip.locally_jumpable(-1) then
 							luasnip.jump(-1)
 						end
 					end, { "i", "s" }),
 				}),
-				-- Formatting configuration to include icons
+				-- Use lspkind to add icons in the completion window.
 				formatting = {
-					format = function(entry, vim_item)
-						local cmp_kinds = {
-							Text = "  ",
-							Method = "  ",
-							Function = "  ",
-							Constructor = "  ",
-							Field = "  ",
-							Variable = "  ",
-							Class = "  ",
-							Interface = "  ",
-							Module = "  ",
-							Property = "  ",
-							Unit = "  ",
-							Value = "  ",
-							Enum = "  ",
-							Keyword = "  ",
-							Snippet = "  ",
-							Color = "  ",
-							File = "  ",
-							Reference = "  ",
-							Folder = "  ",
-							EnumMember = "  ",
-							Constant = "  ",
-							Struct = "  ",
-							Event = "  ",
-							Operator = "  ",
-							TypeParameter = "  ",
-						}
-						vim_item.kind = string.format("%s %s", cmp_kinds[vim_item.kind] or "", vim_item.kind)
-						return vim_item
-					end,
+					format = lspkind.cmp_format({
+						mode = "symbol_text", -- Show both symbol and text
+						maxwidth = 50,
+						ellipsis_char = "...",
+					}),
 				},
 				sources = {
-					{ name = "nvim_lsp", max_item_count = 8 }, -- Limit items from LSP source
-					{ name = "luasnip", max_item_count = 5 }, -- Limit items from Luasnip source
-					{ name = "path", max_item_count = 5 }, -- Limit items from path source
+					{ name = "nvim_lsp", max_item_count = 8 },
+					{ name = "luasnip", max_item_count = 5 },
+					{ name = "path", max_item_count = 5 },
 				},
 			})
 		end,
@@ -967,7 +975,7 @@ require("lazy").setup({
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
 		opts = {
-			ensure_installed = { "bash", "c", "html", "lua", "luadoc", "markdown", "vim", "vimdoc" },
+			ensure_installed = { "bash", "c", "cpp", "html", "lua", "luadoc", "markdown", "vim", "vimdoc" },
 			-- Autoinstall languages that are not installed
 			auto_install = true,
 			highlight = {
@@ -1136,6 +1144,7 @@ require("lazy").setup({
 			})
 			-- setup must be called before loading
 			vim.cmd.colorscheme("catppuccin")
+			require("custom.lsp-float")
 		end,
 	},
 	-- Nvim lua line
@@ -1239,6 +1248,18 @@ require("lazy").setup({
     -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
     -- You can configure highlights by doing something like:
   },]]
+	{
+		"echasnovski/mini.animate",
+		config = function()
+			require("mini.animate").setup({
+				cursor = { enable = true },
+				scroll = { enable = true },
+				resize = { enable = true },
+				open = { enable = false },
+				close = { enable = false },
+			})
+		end,
+	},
 	{
 		"nvim-neo-tree/neo-tree.nvim",
 		version = "*",
